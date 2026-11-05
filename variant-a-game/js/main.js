@@ -2,16 +2,25 @@ import "../sass/main.scss";
 
 let ad,
 	playerElement,
+	gutElement,
 	gameState = "start",
 	previousTime = null;
+
+const GAME_WIDTH = 360;
+const GAME_HEIGHT = 640;
+const GRAVITY = 900;
+const JUMP_FORCE = -300;
+const WORLD_SPEED = 100;
+const WORLD_WIDTH = 2528;
 
 const player = {
 	offsetY: 0,
 	velocityY: 0,
 };
-
-const GRAVITY = 900;
-const JUMP_FORCE = -300;
+const world = {
+	offsetX: 0,
+	maxOffset: WORLD_WIDTH - GAME_WIDTH,
+};
 
 const main = () => {
 	prepareDOMElements();
@@ -19,22 +28,17 @@ const main = () => {
 };
 const prepareDOMElements = () => {
 	ad = document.querySelector(".ad");
-	playerElement = document.querySelector(".ad__player");
+	playerElement = ad.querySelector(".ad__player");
+	gutElement = ad.querySelector(".ad__gut");
 };
 const prepareDOMEvents = () => {
 	ad.addEventListener("pointerdown", handleInput);
-	window.addEventListener("resize", renderPlayer);
+	window.addEventListener("resize", handleResize);
 };
 
-const startGame = () => {
-	gameState = "playing";
-	ad.classList.add("ad--playing");
-
-	jump();
-	requestAnimationFrame(gameLoop);
-};
-const jump = () => {
-	player.velocityY = JUMP_FORCE;
+const handleResize = () => {
+	renderPlayer();
+	renderWorld();
 };
 const handleInput = () => {
 	if (gameState === "start") {
@@ -42,6 +46,17 @@ const handleInput = () => {
 	} else if (gameState === "playing") {
 		jump();
 	}
+};
+const startGame = () => {
+	gameState = "playing";
+	previousTime = null;
+	ad.classList.add("ad--playing");
+
+	jump();
+	requestAnimationFrame(gameLoop);
+};
+const jump = () => {
+	player.velocityY = JUMP_FORCE;
 };
 
 const updatePlayer = (deltaTime) => {
@@ -51,16 +66,28 @@ const updatePlayer = (deltaTime) => {
 	const playerTop = 256 + player.offsetY;
 	const playerBottom = playerTop + 41;
 
-	if (playerTop <= 168 || playerBottom >= 640) {
+	if (playerTop <= 168 || playerBottom >= GAME_HEIGHT) {
 		gameState = "fail";
 		console.log("Game over: player left the playfield");
 	}
 };
+const updateWorld = (deltaTime) => {
+	world.offsetX += WORLD_SPEED * deltaTime;
+	if (world.offsetX >= world.maxOffset) {
+		world.offsetX = world.maxOffset;
+	}
+};
 const renderPlayer = () => {
-	const scale = ad.clientHeight / 640;
+	const scale = ad.clientHeight / GAME_HEIGHT;
 	const translateY = player.offsetY * scale;
 
 	playerElement.style.transform = `translate3d(0,${translateY}px, 0)`;
+};
+
+const renderWorld = () => {
+	const scale = ad.clientHeight / GAME_HEIGHT;
+	const translateX = -world.offsetX * scale;
+	gutElement.style.transform = `translate3d(${translateX}px, 0, 0)`;
 };
 
 const gameLoop = (timeStamp) => {
@@ -73,7 +100,10 @@ const gameLoop = (timeStamp) => {
 	previousTime = timeStamp;
 
 	updatePlayer(deltaTime);
+	updateWorld(deltaTime);
+
 	renderPlayer();
+	renderWorld();
 
 	if (gameState === "playing") {
 		requestAnimationFrame(gameLoop);

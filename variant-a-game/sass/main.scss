@@ -50,6 +50,7 @@ body {
 		height: 100%;
 		width: auto;
 		max-width: none;
+        will-change: transform;
 	}
 	&__player {
 		position: absolute;
