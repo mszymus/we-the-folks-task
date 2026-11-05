@@ -57,6 +57,8 @@ body {
 		left: 15%;
 		width: 11.67%;
 		height: auto;
+		will-change: transform;
+		pointer-events: none;
 	}
 	&__obstacles {
 		position: absolute;
