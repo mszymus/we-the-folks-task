@@ -58,4 +58,35 @@ body {
 		width: 11.67%;
 		height: auto;
 	}
+	&__obstacles {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+	&__obstacle {
+		position: absolute;
+		display: block;
+		height: auto;
+
+		&--bacteria-blue {
+			top: 51.6%;
+			left: 26.5%;
+			width: 9%;
+		}
+		&--stress {
+			top: 58.3%;
+			left: 27.8%;
+			width: 6.1%;
+		}
+		&--bacteria-yellow {
+			top: 51.6%;
+			left: 77%;
+			width: 6%;
+		}
+		&--taboo {
+			top: 61.1%;
+			left: 84%;
+			width: 9%;
+		}
+	}
 }
