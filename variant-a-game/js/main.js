@@ -5,6 +5,9 @@ let ad,
 	playerElement,
 	gutElement,
 	gameObstaclesElement,
+	animationFrameId = null,
+	isPaused = false,
+	soundsToResume = [],
 	failCtaBtn,
 	replayBtn,
 	winCtaBtn,
@@ -79,6 +82,7 @@ const prepareDOMEvents = () => {
 		e.stopPropagation();
 	});
 	muteBtn.addEventListener("click", toggleMute);
+	document.addEventListener("visibilitychange", handleVisibilitychange);
 };
 const handleClickout = () => {
 	window.open(clickTag, "_blank", "noopener, noreferrer");
@@ -125,7 +129,8 @@ const startGame = () => {
 	playSound(sounds.music);
 
 	jump();
-	requestAnimationFrame(gameLoop);
+	isPaused = false;
+	animationFrameId = requestAnimationFrame(gameLoop);
 };
 const jump = () => {
 	player.velocityY = JUMP_FORCE;
@@ -252,6 +257,13 @@ const renderObstacles = () => {
 	});
 };
 const resetGame = () => {
+	if (animationFrameId !== null) {
+		cancelAnimationFrame(animationFrameId);
+		animationFrameId = null;
+	}
+	isPaused = false;
+	soundsToResume = [];
+
 	stopAllSounds();
 	gameState = "start";
 	previousTime = null;
@@ -272,7 +284,8 @@ const restartGame = () => {
 };
 
 const gameLoop = (timeStamp) => {
-	if (gameState !== "playing") return;
+	animationFrameId = null;
+	if (gameState !== "playing" || isPaused) return;
 
 	const deltaTime =
 		previousTime === null
@@ -294,8 +307,8 @@ const gameLoop = (timeStamp) => {
 	renderWorld();
 	renderObstacles();
 
-	if (gameState === "playing") {
-		requestAnimationFrame(gameLoop);
+	if (gameState === "playing" && !isPaused) {
+		animationFrameId = requestAnimationFrame(gameLoop);
 	}
 };
 const prepareAudio = () => {
@@ -334,7 +347,10 @@ const prepareAudio = () => {
 const playSound = (audio) => {
 	if (isMuted || document.hidden) return;
 	audio.play().catch((error) => {
-		console.warn("Could not play audio: ", error);
+		console.warn(
+			`Audio blocked: ${decodeURIComponent(audio.src.split("/").pop())}`,
+			error.name,
+		);
 	});
 };
 const stopAllSounds = () => {
@@ -354,6 +370,41 @@ const toggleMute = () => {
 
 	if (!isMuted && gameState === "playing" && sounds.music.paused) {
 		playSound(sounds.music);
+	}
+};
+const pausedGame = () => {
+	soundsToResume = Object.values(sounds).filter((audio) => !audio.paused);
+	soundsToResume.forEach((audio) => {
+		audio.pause();
+	});
+
+	if (gameState !== "playing") return;
+	isPaused = true;
+	if (animationFrameId !== null) {
+		cancelAnimationFrame(animationFrameId);
+		animationFrameId = null;
+	}
+	previousTime = null;
+};
+const resumeGame = () => {
+	if (gameState === "playing" && isPaused) {
+		isPaused = false;
+		previousTime = null;
+
+		animationFrameId = requestAnimationFrame(gameLoop);
+	}
+	soundsToResume.forEach((audio) => {
+		if (!isMuted) {
+			playSound(audio);
+		}
+	});
+	soundsToResume = [];
+};
+const handleVisibilitychange = () => {
+	if (document.hidden) {
+		pausedGame();
+	} else {
+		resumeGame();
 	}
 };
 
