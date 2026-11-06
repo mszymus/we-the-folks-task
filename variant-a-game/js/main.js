@@ -5,6 +5,8 @@ let ad,
 	playerElement,
 	gutElement,
 	gameObstaclesElement,
+	failCtaBtn,
+	replayBtn,
 	scale = 1,
 	gameState = "start",
 	previousTime = null;
@@ -20,7 +22,7 @@ const GRAVITY = 900;
 const JUMP_FORCE = -300;
 const WORLD_SPEED = 100;
 const WORLD_WIDTH = 2528;
-
+const clickTag = window.clickTag;
 const player = {
 	offsetY: 0,
 	velocityY: 0,
@@ -57,10 +59,17 @@ const prepareDOMElements = () => {
 	playerElement = ad.querySelector(".ad__player");
 	gutElement = ad.querySelector(".ad__gut");
 	gameObstaclesElement = ad.querySelector(".ad__game-obstacles");
+	failCtaBtn = ad.querySelector(".ad__fail-btn--cta");
+	replayBtn = ad.querySelector(".ad__fail-btn--replay");
 };
 const prepareDOMEvents = () => {
 	ad.addEventListener("pointerdown", handleInput);
 	window.addEventListener("resize", handleResize);
+	failCtaBtn.addEventListener("click", handleClickout);
+	replayBtn.addEventListener("click", restartGame);
+};
+const handleClickout = () => {
+	window.open(clickTag, "_blank", "noopener, noreferrer");
 };
 const updateScale = () => {
 	scale = ad.clientHeight / GAME_HEIGHT;
@@ -175,6 +184,7 @@ const chceckObstacleCollisions = () => {
 const endGame = (reason) => {
 	if (gameState !== "playing") return;
 	gameState = "fail";
+	ad.classList.add("ad--fail");
 	console.log(`Game over ${reason}`);
 };
 const updateWorld = (deltaTime) => {
@@ -200,6 +210,24 @@ const renderObstacles = () => {
 
 		obstacle.element.style.transform = `translate3d(${screenX * scale}px,${obstacle.y * scale}px, 0)`;
 	});
+};
+const resetGame = () => {
+	gameState = "start";
+	previousTime = null;
+
+	player.offsetY = 0;
+	player.velocityY = 0;
+
+	world.offsetX = 0;
+	ad.classList.remove("ad--playing", "ad--fail");
+
+	renderPlayer();
+	renderWorld();
+	renderObstacles();
+};
+const restartGame = () => {
+	resetGame();
+	startGame();
 };
 
 const gameLoop = (timeStamp) => {

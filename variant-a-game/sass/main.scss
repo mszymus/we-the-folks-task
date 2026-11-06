@@ -114,4 +114,39 @@ body {
 		display: block;
 		height: auto;
 	}
+	&__fail {
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		display: none;
+		background: url("../assets/bg.jpg") center / 100% 100% no-repeat;
+	}
+	&__fail-btn {
+		position: absolute;
+		left: 10.7%;
+		display: block;
+		padding: 0;
+		border: none;
+		background-color: transparent;
+		cursor: pointer;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+		&--cta {
+			top: 75.4%;
+			width: 51.53%;
+		}
+		&--replay {
+			top: 84.1%;
+			width: 51.53%;
+		}
+	}
+	&--fail {
+		.ad__fail {
+			display: block;
+		}
+	}
 }
