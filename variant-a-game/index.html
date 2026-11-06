@@ -3,63 +3,66 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit-cover">
     <title>Gut Run - Game</title>
 </head>
 
 <body>
     <main class="ad">
-        <img class="ad__layer" src="./assets/bg.jpg" alt="">
-        <div class="ad__world">
-            <img class="ad__layer" src="./assets/01_game/bg_texture.png" alt="">
-            <img class="ad__gut" src="./assets/01_game/gameplay.png" alt="">
+        <div class="ad__stage"><img class="ad__layer" src="./assets/bg.jpg" alt="">
+            <div class="ad__world">
+                <img class="ad__layer" src="./assets/01_game/bg_texture.png" alt="">
+                <img class="ad__gut" src="./assets/01_game/gameplay.png" alt="">
+            </div>
+            <div class="ad__obstacles">
+                <img class="ad__obstacle ad__obstacle--bacteria-blue" src="./assets/01_game/bac6.png" alt="">
+                <img class="ad__obstacle ad__obstacle--stress" src="./assets/01_game/txt1.png" alt="">
+                <img class="ad__obstacle ad__obstacle--bacteria-yellow" src="./assets/01_game/bac2.png" alt="">
+                <img class="ad__obstacle ad__obstacle--taboo" src="./assets/01_game/txt2.png" alt="">
+            </div>
+            <div class="ad__game-obstacles"></div>
+            <img class="ad__layer" src="./assets/border.png" alt="">
+            <img class="ad__layer ad__start-logo" src="./assets/logo.png" alt="">
+            <img class="ad__layer ad__tutorial ad__headline" src="./assets/01_game/tut.png"
+                alt="Bringe Poo durch den Darm ans Ziel.">
+            <img class="ad__player" src="./assets/01_game/player.png" alt="">
+            <img class="ad__gesture ad__tutorial" src="./assets/gesture.png" alt="Tap to run">
+            <div class="ad__fail">
+                <img class="ad__layer" src="./assets/logo.png" alt="">
+                <img class="ad__layer" src="./assets/02_endcard/fail/bubble.png" alt="">
+
+                <img class="ad__layer" src="./assets/02_endcard/fail/bac1.png" alt="">
+                <img class="ad__layer" src="./assets/02_endcard/fail/bac2.png" alt="">
+                <img class="ad__layer" src="./assets/02_endcard/fail/bac3.png" alt="">
+                <img class="ad__layer" src="./assets/02_endcard/fail/bac4.png" alt="">
+                <img class="ad__layer" src="./assets/02_endcard/fail/bac5.png" alt="">
+
+                <img class="ad__layer ad__fail-character" src="./assets/02_endcard/fail/sad.png" alt="">
+                <img class="ad__layer ad__fail-heading" src="./assets/02_endcard/fail/hl.png" alt="">
+
+                <button class="ad__fail-btn ad__fail-btn--cta" type="button" aria-label="Jetzt informieren">
+                    <img src="./assets/02_endcard/fail/cta.png" alt="">
+                </button>
+                <button class="ad__fail-btn ad__fail-btn--replay" type="button" aria-label="Nochmal spielen">
+                    <img src="./assets/02_endcard/fail/replay.png" alt="">
+                </button>
+            </div>
+            <div class="ad__win">
+                <img class="ad__layer" src="./assets/bg.jpg" alt="">
+                <img class="ad__layer" src="./assets/logo.png" alt="">
+
+                <img class="ad__layer" src="./assets/02_endcard/win/bubble.png" alt="">
+                <img class="ad__layer ad__win-confetti" src="./assets/02_endcard/win/konfetti.png" alt="">
+                <img class="ad__layer ad__win-character" src="./assets/02_endcard/win/happy.png" alt="">
+                <img class="ad__layer ad__win-heading" src="./assets/02_endcard/win/hl.png" alt="">
+
+                <button class="ad__win-cta" type="button" aria-label="Jetzt mehr erfahren">
+                    <img src="./assets/02_endcard/win/cta.png" alt="">
+                </button>
+            </div>
+            <button class="ad__mute-btn" type="button" aria-label="Ton stummschalten" aria-pressed="false">Ton
+                an</button>
         </div>
-        <div class="ad__obstacles">
-            <img class="ad__obstacle ad__obstacle--bacteria-blue" src="./assets/01_game/bac6.png" alt="">
-            <img class="ad__obstacle ad__obstacle--stress" src="./assets/01_game/txt1.png" alt="">
-            <img class="ad__obstacle ad__obstacle--bacteria-yellow" src="./assets/01_game/bac2.png" alt="">
-            <img class="ad__obstacle ad__obstacle--taboo" src="./assets/01_game/txt2.png" alt="">
-        </div>
-        <div class="ad__game-obstacles"></div>
-        <img class="ad__layer" src="./assets/border.png" alt="">
-        <img class="ad__layer" src="./assets/logo.png" alt="">
-        <img class="ad__layer ad__tutorial" src="./assets/01_game/tut.png" alt="Bringe Poo durch den Darm ans Ziel.">
-        <img class="ad__player" src="./assets/01_game/player.png" alt="">
-        <img class="ad__gesture ad__tutorial" src="./assets/gesture.png" alt="Tap to run">
-        <div class="ad__fail">
-            <img class="ad__layer" src="./assets/logo.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/bubble.png" alt="">
-
-            <img class="ad__layer" src="./assets/02_endcard/fail/bac1.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/bac2.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/bac3.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/bac4.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/bac5.png" alt="">
-
-            <img class="ad__layer" src="./assets/02_endcard/fail/sad.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/fail/hl.png" alt="">
-
-            <button class="ad__fail-btn ad__fail-btn--cta" type="button" aria-label="Jetzt informieren">
-                <img src="./assets/02_endcard/fail/cta.png" alt="">
-            </button>
-            <button class="ad__fail-btn ad__fail-btn--replay" type="button" aria-label="Nochmal spielen">
-                <img src="./assets/02_endcard/fail/replay.png" alt="">
-            </button>
-        </div>
-        <div class="ad__win">
-            <img class="ad__layer" src="./assets/bg.jpg" alt="">
-            <img class="ad__layer" src="./assets/logo.png" alt="">
-
-            <img class="ad__layer" src="./assets/02_endcard/win/bubble.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/win/konfetti.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/win/happy.png" alt="">
-            <img class="ad__layer" src="./assets/02_endcard/win/hl.png" alt="">
-
-            <button class="ad__win-cta" type="button" aria-label="Jetzt mehr erfahren">
-                <img src="./assets/02_endcard/win/cta.png" alt="">
-            </button>
-        </div>
-        <button class="ad__mute-btn" type="button" aria-label="Ton stummschalten" aria-pressed="false">Ton an</button>
     </main>
 
 </body>

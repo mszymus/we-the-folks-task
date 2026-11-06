@@ -16,12 +16,23 @@ body {
 }
 .ad {
 	position: relative;
-	width: min(360px, 100vw, 56.25vh);
-	width: min(360px, 100vw, 56.25dvh);
-	aspect-ratio: 9 / 16;
-
+	width: 100%;
+	height: 100vh;
+	height: 100dvh;
+	display: grid;
+	place-items: center;
 	overflow: hidden;
-	background-color: #0e2048;
+	background: #0a1e49 url("../assets/bg.jpg") center / cover no-repeat;
+	touch-action: none;
+
+	&__stage {
+		position: relative;
+		width: min(100vw, 56.25vh);
+		width: min(100vw, 56.25dvh);
+		aspect-ratio: 9 / 16;
+		overflow: hidden;
+	}
+
 	&--playing {
 		.ad__tutorial,
 		.ad__obstacles {

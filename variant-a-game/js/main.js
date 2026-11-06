@@ -1,5 +1,11 @@
 import { render } from "sass";
 import "../sass/main.scss";
+import { gsap } from "gsap";
+let introAnimation = null;
+let endcardAnimation = null;
+const reducedMotion = window.matchMedia(
+	"(prefers-reduced-motion: reduce)",
+).matches;
 
 let ad,
 	playerElement,
@@ -13,6 +19,7 @@ let ad,
 	winCtaBtn,
 	muteBtn,
 	sounds,
+	adStage,
 	isMuted = false,
 	scale = 1,
 	gameState = "start",
@@ -61,6 +68,7 @@ const main = () => {
 	updateScale();
 	createObstacles();
 	prepareDOMEvents();
+	animateStartScreen();
 };
 const prepareDOMElements = () => {
 	ad = document.querySelector(".ad");
@@ -71,6 +79,7 @@ const prepareDOMElements = () => {
 	replayBtn = ad.querySelector(".ad__fail-btn--replay");
 	winCtaBtn = ad.querySelector(".ad__win-cta");
 	muteBtn = ad.querySelector(".ad__mute-btn");
+	adStage = ad.querySelector(".ad__stage");
 };
 const prepareDOMEvents = () => {
 	ad.addEventListener("click", handleInput);
@@ -88,7 +97,7 @@ const handleClickout = () => {
 	window.open(clickTag, "_blank", "noopener, noreferrer");
 };
 const updateScale = () => {
-	scale = ad.clientHeight / GAME_HEIGHT;
+	scale = adStage.clientWidth / GAME_WIDTH;
 };
 const createObstacles = () => {
 	gameObstaclesElement.replaceChildren();
@@ -122,6 +131,10 @@ const handleInput = (e) => {
 	}
 };
 const startGame = () => {
+	if (introAnimation) {
+		introAnimation.revert();
+		introAnimation = null;
+	}
 	gameState = "playing";
 	previousTime = null;
 	ad.classList.add("ad--playing");
@@ -217,6 +230,7 @@ const endGame = (reason) => {
 	if (gameState !== "playing") return;
 	gameState = "fail";
 	ad.classList.add("ad--fail");
+	animateFailScreen();
 
 	stopAllSounds();
 	playSound(sounds.crash);
@@ -228,6 +242,7 @@ const finishGame = () => {
 	if (gameState !== "playing") return;
 	gameState = "win";
 	ad.classList.add("ad--win");
+	animateWinScreen();
 
 	stopAllSounds();
 	playSound(sounds.cheer);
@@ -258,6 +273,10 @@ const renderObstacles = () => {
 	});
 };
 const resetGame = () => {
+	if (endcardAnimation) {
+		endcardAnimation.revert();
+		endcardAnimation = null;
+	}
 	if (animationFrameId !== null) {
 		cancelAnimationFrame(animationFrameId);
 		animationFrameId = null;
@@ -401,9 +420,117 @@ const resumeGame = () => {
 const handleVisibilitychange = () => {
 	if (document.hidden) {
 		pausedGame();
+		if (introAnimation) introAnimation.pause();
+		if (endcardAnimation) endcardAnimation.pause();
 	} else {
 		resumeGame();
+
+		if (introAnimation) introAnimation.resume();
+		if (endcardAnimation) endcardAnimation.resume();
 	}
+};
+const animateStartScreen = () => {
+	if (reducedMotion) return;
+
+	introAnimation = gsap.timeline();
+
+	introAnimation
+		.from(".ad__start-logo", {
+			opacity: 0,
+			duration: 0.4,
+		})
+		.from(
+			".ad__headline",
+			{
+				opacity: 0,
+				y: -18,
+				duration: 0.65,
+				ease: "power2.out",
+			},
+			"-=0.1",
+		)
+		.from(
+			".ad__gesture",
+			{
+				opacity: 0,
+				duration: 0.55,
+				ease: "power2.out",
+			},
+			"-=0.2",
+		);
+};
+const animateFailScreen = () => {
+	endcardAnimation = gsap.timeline();
+	endcardAnimation
+		.from(".ad__fail-character", {
+			opacity: 0,
+			scale: 0.9,
+			duration: 0.65,
+			ease: "back.out(1.5)",
+		})
+		.from(
+			".ad__fail-heading",
+			{
+				opacity: 0,
+				y: 15,
+				duration: 0.65,
+				ease: "power2.out",
+			},
+			"-=0.2",
+		)
+		.from(
+			".ad__fail-btn",
+			{
+				opacity: 0,
+				y: 15,
+				duration: 0.4,
+				stagger: 0.15,
+				ease: "power2.out",
+			},
+			"-=0.1",
+		);
+};
+const animateWinScreen = () => {
+	if (reducedMotion) return;
+	endcardAnimation = gsap.timeline();
+
+	endcardAnimation
+		.from(".ad__win-confetti", {
+			opacity: 0,
+			y: -15,
+			duration: 0.8,
+			ease: "power1.out",
+		})
+		.from(
+			".ad__win-character",
+			{
+				opacity: 0,
+				scale: 0.85,
+				duration: 0.65,
+				ease: "back.out(1.7)",
+			},
+			"-=0.6",
+		)
+		.from(
+			".ad__win-heading",
+			{
+				opacity: 0,
+				y: 15,
+				duration: 0.45,
+				ease: "power2.out",
+			},
+			"-=0.2",
+		)
+		.from(
+			".ad__win-cta",
+			{
+				opacity: 0,
+				scale: 0.9,
+				duration: 0.45,
+				ease: "back.out(1.5)",
+			},
+			"-=0.1",
+		);
 };
 
 main();
