@@ -7,6 +7,7 @@ let ad,
 	gameObstaclesElement,
 	failCtaBtn,
 	replayBtn,
+	winCtaBtn,
 	scale = 1,
 	gameState = "start",
 	previousTime = null;
@@ -61,12 +62,14 @@ const prepareDOMElements = () => {
 	gameObstaclesElement = ad.querySelector(".ad__game-obstacles");
 	failCtaBtn = ad.querySelector(".ad__fail-btn--cta");
 	replayBtn = ad.querySelector(".ad__fail-btn--replay");
+	winCtaBtn = ad.querySelector(".ad__win-cta");
 };
 const prepareDOMEvents = () => {
 	ad.addEventListener("pointerdown", handleInput);
 	window.addEventListener("resize", handleResize);
 	failCtaBtn.addEventListener("click", handleClickout);
 	replayBtn.addEventListener("click", restartGame);
+	winCtaBtn.addEventListener("click", handleClickout);
 };
 const handleClickout = () => {
 	window.open(clickTag, "_blank", "noopener, noreferrer");
@@ -181,11 +184,27 @@ const chceckObstacleCollisions = () => {
 		}
 	}
 };
+const chcekWinCondition = () => {
+	const reachedEnd = world.offsetX >= world.maxOffset;
+
+	const allObstaclesPassed = obstacles.every((obstacle) => {
+		const obstacleRight = obstacle.x + obstacle.width - world.offsetX;
+		return obstacleRight <= PLAYER_X;
+	});
+	if (reachedEnd && allObstaclesPassed) {
+		finishGame();
+	}
+};
 const endGame = (reason) => {
 	if (gameState !== "playing") return;
 	gameState = "fail";
 	ad.classList.add("ad--fail");
 	console.log(`Game over ${reason}`);
+};
+const finishGame = () => {
+	if (gameState !== "playing") return;
+	gameState = "win";
+	ad.classList.add("ad--win");
 };
 const updateWorld = (deltaTime) => {
 	world.offsetX += WORLD_SPEED * deltaTime;
@@ -219,7 +238,7 @@ const resetGame = () => {
 	player.velocityY = 0;
 
 	world.offsetX = 0;
-	ad.classList.remove("ad--playing", "ad--fail");
+	ad.classList.remove("ad--playing", "ad--fail", "ad--win");
 
 	renderPlayer();
 	renderWorld();
@@ -244,6 +263,9 @@ const gameLoop = (timeStamp) => {
 	if (gameState === "playing") {
 		updateWorld(deltaTime);
 		chceckObstacleCollisions();
+		if (gameState === "playing") {
+			chcekWinCondition();
+		}
 	}
 
 	renderPlayer();

@@ -149,4 +149,33 @@ body {
 			display: block;
 		}
 	}
+	&__win {
+		position: absolute;
+		inset: 0;
+		z-index: 11;
+
+		display: none;
+		background-color: #0a1e49;
+	}
+	&__win-cta {
+		position: absolute;
+		top: 87.5%;
+		left: 7.5%;
+		width: 59.55%;
+		padding: 0;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+	&--win {
+		.ad__win {
+			display: block;
+		}
+	}
 }
