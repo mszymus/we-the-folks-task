@@ -60,7 +60,7 @@ body {
 	&__world {
 		position: absolute;
 		inset: 0;
-		clip-path: inset(26.3% 0 0 0);
+		clip-path: inset(calc(26.3% + 2px) 0 0 0);
 	}
 	&__gut {
 		position: absolute;

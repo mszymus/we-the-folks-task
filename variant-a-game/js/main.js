@@ -1,6 +1,13 @@
-import { render } from "sass";
 import "../sass/main.scss";
 import { gsap } from "gsap";
+const obstacleImages = import.meta.glob(
+	["../assets/01_game/bac*.png", "../assets/01_game/txt*.png"],
+	{
+		eager: true,
+		query: "?url",
+		import: "default",
+	},
+);
 let introAnimation = null;
 let endcardAnimation = null;
 const reducedMotion = window.matchMedia(
@@ -106,7 +113,7 @@ const createObstacles = () => {
 		const img = document.createElement("img");
 		img.style.width = `${(obstacle.width / GAME_WIDTH) * 100}%`;
 
-		img.src = `./assets/01_game/${obstacle.file}`;
+		img.src = obstacleImages[`../assets/01_game/${obstacle.file}`];
 		Image.alt = "";
 		img.classList.add("ad__game-obstacle");
 
