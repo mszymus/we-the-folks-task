@@ -8,6 +8,9 @@ let ad,
 	failCtaBtn,
 	replayBtn,
 	winCtaBtn,
+	muteBtn,
+	sounds,
+	isMuted = false,
 	scale = 1,
 	gameState = "start",
 	previousTime = null;
@@ -51,6 +54,7 @@ const obstacles = [
 ];
 const main = () => {
 	prepareDOMElements();
+	prepareAudio();
 	updateScale();
 	createObstacles();
 	prepareDOMEvents();
@@ -63,6 +67,7 @@ const prepareDOMElements = () => {
 	failCtaBtn = ad.querySelector(".ad__fail-btn--cta");
 	replayBtn = ad.querySelector(".ad__fail-btn--replay");
 	winCtaBtn = ad.querySelector(".ad__win-cta");
+	muteBtn = ad.querySelector(".ad__mute-btn");
 };
 const prepareDOMEvents = () => {
 	ad.addEventListener("pointerdown", handleInput);
@@ -70,6 +75,10 @@ const prepareDOMEvents = () => {
 	failCtaBtn.addEventListener("click", handleClickout);
 	replayBtn.addEventListener("click", restartGame);
 	winCtaBtn.addEventListener("click", handleClickout);
+	muteBtn.addEventListener("pointerdown", (e) => {
+		e.stopPropagation();
+	});
+	muteBtn.addEventListener("click", toggleMute);
 };
 const handleClickout = () => {
 	window.open(clickTag, "_blank", "noopener, noreferrer");
@@ -111,6 +120,9 @@ const startGame = () => {
 	gameState = "playing";
 	previousTime = null;
 	ad.classList.add("ad--playing");
+
+	stopAllSounds();
+	playSound(sounds.music);
 
 	jump();
 	requestAnimationFrame(gameLoop);
@@ -199,12 +211,21 @@ const endGame = (reason) => {
 	if (gameState !== "playing") return;
 	gameState = "fail";
 	ad.classList.add("ad--fail");
+
+	stopAllSounds();
+	playSound(sounds.crash);
+	playSound(sounds.fail);
+
 	console.log(`Game over ${reason}`);
 };
 const finishGame = () => {
 	if (gameState !== "playing") return;
 	gameState = "win";
 	ad.classList.add("ad--win");
+
+	stopAllSounds();
+	playSound(sounds.cheer);
+	playSound(sounds.applause);
 };
 const updateWorld = (deltaTime) => {
 	world.offsetX += WORLD_SPEED * deltaTime;
@@ -231,6 +252,7 @@ const renderObstacles = () => {
 	});
 };
 const resetGame = () => {
+	stopAllSounds();
 	gameState = "start";
 	previousTime = null;
 
@@ -274,6 +296,64 @@ const gameLoop = (timeStamp) => {
 
 	if (gameState === "playing") {
 		requestAnimationFrame(gameLoop);
+	}
+};
+const prepareAudio = () => {
+	sounds = {
+		music: new Audio(
+			new URL(
+				"../assets/music/background_music/Funny Game Loop.mp3",
+				import.meta.url,
+			).href,
+		),
+		crash: new Audio(
+			new URL("../assets/music/crash/Cartoon Crash Boing.mp3", import.meta.url)
+				.href,
+		),
+		fail: new Audio(
+			new URL("../assets/music/endcard_fail/Fail.mp3", import.meta.url).href,
+		),
+		cheer: new Audio(
+			new URL(
+				"../assets/music/endcard_win/Celebrative Happy Woohoo Cheer 2.mp3",
+				import.meta.url,
+			).href,
+		),
+		applause: new Audio(
+			new URL("../assets/music/endcard_win/applause.mp3", import.meta.url).href,
+		),
+	};
+
+	sounds.music.loop = true;
+	sounds.music.volume = 0.25;
+	sounds.crash.volume = 0.5;
+	sounds.fail.volume = 0.4;
+	sounds.cheer.volume = 0.6;
+	sounds.applause.volume = 0.4;
+};
+const playSound = (audio) => {
+	if (isMuted || document.hidden) return;
+	audio.play().catch((error) => {
+		console.warn("Could not play audio: ", error);
+	});
+};
+const stopAllSounds = () => {
+	Object.values(sounds).forEach((audio) => {
+		audio.pause();
+		audio.currentTime = 0;
+	});
+};
+const toggleMute = () => {
+	isMuted = !isMuted;
+
+	Object.values(sounds).forEach((audio) => {
+		audio.muted = isMuted;
+	});
+	muteBtn.textContent = isMuted ? "Ton aus" : "Ton an";
+	muteBtn.setAttribute("aria-pressed", String(isMuted));
+
+	if (!isMuted && gameState === "playing" && sounds.music.paused) {
+		playSound(sounds.music);
 	}
 };
 
