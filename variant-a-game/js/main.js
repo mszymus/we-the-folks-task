@@ -73,7 +73,7 @@ const prepareDOMElements = () => {
 	muteBtn = ad.querySelector(".ad__mute-btn");
 };
 const prepareDOMEvents = () => {
-	ad.addEventListener("pointerdown", handleInput);
+	ad.addEventListener("click", handleInput);
 	window.addEventListener("resize", handleResize);
 	failCtaBtn.addEventListener("click", handleClickout);
 	replayBtn.addEventListener("click", restartGame);
@@ -113,7 +113,8 @@ const handleResize = () => {
 	renderWorld();
 	renderObstacles();
 };
-const handleInput = () => {
+const handleInput = (e) => {
+	if (e.target.closest("button")) return;
 	if (gameState === "start") {
 		startGame();
 	} else if (gameState === "playing") {
@@ -347,10 +348,7 @@ const prepareAudio = () => {
 const playSound = (audio) => {
 	if (isMuted || document.hidden) return;
 	audio.play().catch((error) => {
-		console.warn(
-			`Audio blocked: ${decodeURIComponent(audio.src.split("/").pop())}`,
-			error.name,
-		);
+		console.warn("Audio playback failed: ", error.name);
 	});
 };
 const stopAllSounds = () => {
