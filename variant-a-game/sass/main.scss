@@ -22,7 +22,15 @@ body {
 
 	overflow: hidden;
 	background-color: #0e2048;
-
+	&--playing {
+		.ad__tutorial,
+		.ad__obstacles {
+			display: none;
+		}
+		.ad__game-obstacles {
+			display: block;
+		}
+	}
 	&__layer {
 		position: absolute;
 		inset: 0;
@@ -50,7 +58,7 @@ body {
 		height: 100%;
 		width: auto;
 		max-width: none;
-        will-change: transform;
+		will-change: transform;
 	}
 	&__player {
 		position: absolute;
@@ -91,5 +99,19 @@ body {
 			left: 84%;
 			width: 9%;
 		}
+	}
+	&__game-obstacles {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		display: none;
+		pointer-events: none;
+	}
+	&__game-obstacle {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		height: auto;
 	}
 }
