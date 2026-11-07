@@ -31,4 +31,22 @@
 
 ## Variant B — Fireplace
 
-To be added after completing Variant B.
+### Layout
+
+- I used three separate HTML files because each banner needs to work independently.
+- I used CSS Grid and iframes to create a preview of the complete advertisement.
+- I chose the provided cropped background images instead of the large background file. This helped me keep the correct sizes and avoid loading an unnecessary image.
+
+### Animations
+
+- I used GSAP timelines to animate the logos, headlines, text panels and CTA buttons.
+- I used fixed animation timings to keep the three banners visually coordinated.
+- In the preview, I used `postMessage()` to start all animations together.
+- I kept the background static to avoid visible gaps between the banners.
+- I limited the CTA animation time and supported reduced motion settings.
+
+### Assets
+
+- I used the provided 2x graphics at half their original dimensions.
+- I prepared transparent copies of some graphic layers because their black backgrounds covered other elements.
+- The final production size was checked after building the project with Vite.

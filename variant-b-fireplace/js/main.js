@@ -9,7 +9,7 @@ const prepareClickout = () => {
 };
 
 const reduceMotion = window.matchMedia(
-	"(prefers-reduces-motion: reduce)",
+	"(prefers-reduced-motion: reduce)",
 ).matches;
 
 const startCtaPulse = () => {

@@ -230,7 +230,7 @@ const checkWinCondition = () => {
 		finishGame();
 	}
 };
-const endGame = (reason) => {
+const endGame = () => {
 	if (gameState !== "playing") return;
 	gameState = "fail";
 	ad.classList.add("ad--fail");

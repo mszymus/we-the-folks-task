@@ -39,13 +39,25 @@ The current collision system uses smaller rectangular hitboxes instead of checki
 
 ## AI usage
 
-I used AI mainly as a learning tool when I needed help understanding JavaScript concepts, ser APIs or parts of the implementation. I also used online documentation, including MDN, and tested the solutions in the browser.
+I mainly used ChatGPT to help me solve problems when I couldn't find a clear solution in MDN documentation or other online resources. I also used it as a learning tool to understand how to implement certain features and how they work.
 
-For example, the first version used `pointerdown` to start the game, but Firefox blocked the initial audio playback. I changed the input handling to `click` and tested the result.
+For example, ChatGPT helped me understand and solve an audio playback issue related to the difference between pointerdown and click events. After changing the event to click, the audio worked correctly on the first interaction.
 
 ## Variant B — Fireplace
 
-In progress.
+Fireplace is a desktop advertisement made of three separate parts: a top banner and two side banners.
+
+Each part works as an independent HTML page. I also created a preview page using iframes to show the complete layout.
+
+**Features:**
+
+- A continuous background across all three banners.
+- GSAP animations for logos, text panels, headlines and CTA buttons.
+- A coordinated animation sequence using `postMessage()` in the preview.
+- A subtle CTA animation that stops after a short time.
+- Clickout support and reduced motion handling.
+
+To view the complete advertisement, open `/variant-b-fireplace/preview.html` in the local Vite server.
 
 ## Technical decisions
 
