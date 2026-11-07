@@ -47,6 +47,17 @@ body {
 		outline: 3px solid #fff;
 		outline-offset: -3px;
 	}
+	&__headline {
+		&--first {
+			clip-path: inset(0 0 66% 0);
+		}
+		&--second {
+			clip-path: inset(34% 0 36% 0);
+		}
+		&--third {
+			clip-path: inset(62% 0 0 0);
+		}
+	}
 }
 .preview-page {
 	padding: 24px;
