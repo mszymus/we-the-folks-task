@@ -43,7 +43,7 @@ const GRAVITY = 900;
 const JUMP_FORCE = -300;
 const WORLD_SPEED = 100;
 const WORLD_WIDTH = 2528;
-const clickTag = window.clickTag;
+const clickTag = window.clickTag || "https://example.com/landing";
 const player = {
 	offsetY: 0,
 	velocityY: 0,
@@ -94,11 +94,8 @@ const prepareDOMEvents = () => {
 	failCtaBtn.addEventListener("click", handleClickout);
 	replayBtn.addEventListener("click", restartGame);
 	winCtaBtn.addEventListener("click", handleClickout);
-	muteBtn.addEventListener("pointerdown", (e) => {
-		e.stopPropagation();
-	});
 	muteBtn.addEventListener("click", toggleMute);
-	document.addEventListener("visibilitychange", handleVisibilitychange);
+	document.addEventListener("visibilitychange", handleVisibilityChange);
 };
 const handleClickout = () => {
 	window.open(clickTag, "_blank", "noopener, noreferrer");
@@ -114,7 +111,7 @@ const createObstacles = () => {
 		img.style.width = `${(obstacle.width / GAME_WIDTH) * 100}%`;
 
 		img.src = obstacleImages[`../assets/01_game/${obstacle.file}`];
-		Image.alt = "";
+		img.alt = "";
 		img.classList.add("ad__game-obstacle");
 
 		obstacle.element = img;
@@ -165,7 +162,7 @@ const updatePlayer = (deltaTime) => {
 	const playerBottom = playerTop + PLAYER_HEIGHT;
 
 	if (playerTop <= PLAYFIELD_TOP || playerBottom >= GAME_HEIGHT) {
-		endGame("out of bounds");
+		endGame();
 	}
 };
 const createHitbox = (x, y, width, height, paddingX, paddingY) => {
@@ -184,7 +181,7 @@ const isColliding = (first, second) => {
 		first.bottom > second.top
 	);
 };
-const chceckObstacleCollisions = () => {
+const checkObstacleCollisions = () => {
 	const playerHitbox = createHitbox(
 		PLAYER_X,
 		PLAYER_START_Y + player.offsetY,
@@ -217,12 +214,12 @@ const chceckObstacleCollisions = () => {
 		);
 
 		if (isColliding(playerHitbox, obstacleHitbox)) {
-			endGame(`collision with ${obstacle.file}`);
+			endGame();
 			break;
 		}
 	}
 };
-const chcekWinCondition = () => {
+const checkWinCondition = () => {
 	const reachedEnd = world.offsetX >= world.maxOffset;
 
 	const allObstaclesPassed = obstacles.every((obstacle) => {
@@ -242,8 +239,6 @@ const endGame = (reason) => {
 	stopAllSounds();
 	playSound(sounds.crash);
 	playSound(sounds.fail);
-
-	console.log(`Game over ${reason}`);
 };
 const finishGame = () => {
 	if (gameState !== "playing") return;
@@ -324,9 +319,9 @@ const gameLoop = (timeStamp) => {
 
 	if (gameState === "playing") {
 		updateWorld(deltaTime);
-		chceckObstacleCollisions();
+		checkObstacleCollisions();
 		if (gameState === "playing") {
-			chcekWinCondition();
+			checkWinCondition();
 		}
 	}
 
@@ -396,7 +391,7 @@ const toggleMute = () => {
 		playSound(sounds.music);
 	}
 };
-const pausedGame = () => {
+const pauseGame = () => {
 	soundsToResume = Object.values(sounds).filter((audio) => !audio.paused);
 	soundsToResume.forEach((audio) => {
 		audio.pause();
@@ -424,9 +419,9 @@ const resumeGame = () => {
 	});
 	soundsToResume = [];
 };
-const handleVisibilitychange = () => {
+const handleVisibilityChange = () => {
 	if (document.hidden) {
-		pausedGame();
+		pauseGame();
 		if (introAnimation) introAnimation.pause();
 		if (endcardAnimation) endcardAnimation.pause();
 	} else {
@@ -467,6 +462,7 @@ const animateStartScreen = () => {
 		);
 };
 const animateFailScreen = () => {
+	if (reducedMotion) return;
 	endcardAnimation = gsap.timeline();
 	endcardAnimation
 		.from(".ad__fail-character", {
