@@ -2,46 +2,33 @@
 
 ## Variant A — Gut Run
 
-### Technology
+### Game structure
 
-- Vanilla JavaScript for game logic and DOM manipulation.
-- SCSS with BEM naming for styling.
-- GSAP for introductory and endcard animations.
-- Vite for local development and production builds.
-
-### Game implementation
-
-- Chose DOM elements instead of Canvas because the supplied assets consist mainly of image layers.
-- Used `requestAnimationFrame()` with delta time to update movement independently of frame rate.
-- Kept the player's horizontal position fixed and moved the background and obstacles horizontally.
-- Used gravity and jump velocity for vertical movement.
+- I used DOM elements instead of Canvas because the provided graphics were already prepared as separate image layers. This made positioning and styling easier.
+- I kept the player at a fixed horizontal position and moved the background and obstacles from right to left.
+- I used `requestAnimationFrame()` and delta time to keep movement consistent across different frame rates.
 
 ### Collision detection
 
-- Used rectangular hitboxes with padding to avoid collisions with transparent image areas.
-- Converted obstacle positions from world coordinates to screen coordinates.
-- Adjusted obstacle positions manually to improve gameplay and visual alignment.
+- I used rectangular hitboxes with smaller collision areas because the images contain transparent space around the characters and obstacles.
+- Obstacle positions are calculated relative to the moving background.
 
 ### Responsive layout
 
-- Used 360 × 640 as the logical coordinate system.
-- Scaled the game proportionally to preserve the original graphics.
-- Used a full-viewport outer container to provide background coverage on different screen sizes.
+- The game uses a logical size of 360 × 640 pixels.
+- I scale the game proportionally to avoid stretching the graphics. The outer container fills the viewport with a background.
 
-### Audio and animation
+### Audio and animations
 
-- Used the native Audio API with browser autoplay restrictions.
-- Started audio after user interaction.
-- Added mute handling and stopped or resumed game activity when tab visibility changes.
-- Used GSAP timelines to coordinate entrance animations.
-- Respected `prefers-reduced-motion` for decorative animations.
+- Audio starts after user interaction to follow browser autoplay rules.
+- The game and audio pause when the browser tab is hidden.
+- I used GSAP timelines for the start and endcard animations, while the game movement is handled separately with JavaScript.
 
 ### Build and assets
 
-- Used Vite to bundle JavaScript, SCSS and referenced graphics.
-- Used `import.meta.glob()` to include dynamically generated obstacle images in the production build.
-- Asset compression: record any compression performed and the final production size after verification.
+- I chose Vite to make development easier and prepare a production build.
+- I used `import.meta.glob()` to include obstacle images that are created dynamically in JavaScript.
 
 ## Variant B — Fireplace
 
-To be completed with the implementation of Variant B.
+To be added after completing Variant B.

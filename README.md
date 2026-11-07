@@ -1,55 +1,52 @@
-# We The Folks — Junior Frontend Engineer Task
+# We The Folks — Junior Frontend Task
 
-Recruitment task built using HTML, SCSS, JavaScript, GSAP and Vite.
+This repository contains my recruitment task for the Junior Frontend Engineer position at We The Folks.
+
+**Technologies:** HTML, SCSS, JavaScript, GSAP and Vite.
 
 ## Variant A — Gut Run
 
-A mobile tap-to-jump game. The player controls a character moving through a scrolling gut while avoiding bacteria and text obstacles.
+Gut Run is a mobile mini-game where the player moves through a scrolling gut and avoids obstacles.
 
-**Features:**
+The game includes:
 
-- Gravity-based movement and tap controls
-- 15 obstacles, each appearing once per run
-- Collision detection with reduced hitboxes
-- Fail and win endcards
-- Replay and CTA clickouts
-- Background music, sound effects and mute control
-- GSAP animations
-- Pause and resume on tab visibility changes
-- Responsive layout based on the 360 × 640 design
+- Tap-to-jump controls, gravity and collision detection.
+- Bacteria and text obstacles that appear once per run.
+- Win and fail screens, with a replay option after losing.
+- Music, sound effects and a mute button.
+- GSAP animations and automatic pause when the tab is hidden.
+
+The layout is based on the original 360 × 640 design and scales to different screen sizes.
 
 ## How to run
+
+Run these commands in the project folder:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `/variant-a-game/index.html` in the local Vite server.
+Then open `/variant-a-game/index.html` in the local Vite server.
 
-To test the production version:
+To check the production version, use `npm run build` and `npm run preview`.
 
-```bash
-npm run build
-npm run preview
-```
+## What I would improve
 
-## Technical decisions
+With more time, I would add a visual debug mode for collision boxes and test the game on more physical mobile devices.
 
-See [DECISIONS.md](./DECISIONS.md).
-
-## Known limitations and possible improvements
-
-- Collision detection uses simplified rectangular hitboxes rather than pixel-perfect collision detection.
-- A visual hitbox debug mode could make obstacle tuning easier.
-- Further testing on physical mobile devices would help confirm cross-browser consistency.
+The current collision system uses smaller rectangular hitboxes instead of checking the exact shape of each image.
 
 ## AI usage
 
-I used ChatGPT to understand browser APIs, GSAP, collision detection and game state management, and to discuss implementation approaches. I reviewed and tested the suggested code rather than accepting it without changes.
+I used AI mainly as a learning tool when I needed help understanding JavaScript concepts, ser APIs or parts of the implementation. I also used online documentation, including MDN, and tested the solutions in the browser.
 
-For example, the original obstacle coordinates suggested by AI did not match the gameplay layout. I adjusted their positions manually and tested them in the game.
+For example, the first version used `pointerdown` to start the game, but Firefox blocked the initial audio playback. I changed the input handling to `click` and tested the result.
 
 ## Variant B — Fireplace
 
-To be added after completing the desktop variant.
+In progress.
+
+## Technical decisions
+
+See [DECISIONS.md](./DECISIONS.md) for the main implementation choices.
